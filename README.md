@@ -1,52 +1,133 @@
 # Strong Log
 
-A workout logging app, styled after StrongLifts' logging flow: start a workout, log sets one at a time, view history.
+A workout logging app for iPhone, inspired by the StrongLifts UX. Log exercises, track sets, view history and potential AI integration.
 
-## Structure
+Built with React Native (Expo), Node/Express, Postgres (Supabase), and Drizzle ORM — TypeScript end-to-end.
 
-- `app/` — React Native (Expo) mobile app
-- `api/` — Express + TypeScript backend, Postgres via Drizzle ORM, auth via Supabase
+---
 
-## Getting started
+## Stack
 
-### 1. Set up Supabase
+| Layer | Technology |
+|---|---|
+| Mobile app | React Native + Expo (TypeScript) |
+| Backend API | Node.js + Express (TypeScript) |
+| Database | PostgreSQL via Supabase |
+| ORM | Drizzle |
+| Auth | Supabase Auth |
+| Deploy | Railway / Fly.io (coming) |
 
-Create a project at [supabase.com](https://supabase.com). You'll need:
-- The project's Postgres connection string (Project Settings → Database)
-- The project URL and anon key (Project Settings → API)
+---
 
-### 2. Backend (`api/`)
+## Project Structure
 
 ```
+strong-log/
+├── api/                  Express backend
+│   ├── src/
+│   │   ├── db/           Drizzle schema + client
+│   │   ├── middleware/   Auth (Supabase JWT verification)
+│   │   └── routes/       Workout, exercise, set endpoints
+│   └── drizzle/          SQL migrations
+└── app/                  Expo mobile app
+    └── src/
+        ├── context/      Auth context (session management)
+        ├── lib/          Supabase client + API client
+        ├── navigation/   React Navigation stack
+        └── screens/      SignIn, Home, ActiveWorkout, History
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- A [Supabase](https://supabase.com) project (free tier works)
+- [Expo Go](https://expo.dev/go) on your iPhone
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/mjbalwi/strong-log.git
+cd strong-log
+```
+
+### 2. Backend setup
+
+```bash
 cd api
-cp .env.example .env   # fill in DATABASE_URL, SUPABASE_URL, SUPABASE_ANON_KEY
+cp .env.example .env
+```
+
+Fill in `api/.env`:
+```
+PORT=3000
+DATABASE_URL=          # Supabase session pooler connection string
+SUPABASE_URL=          # https://your-project.supabase.co
+SUPABASE_ANON_KEY=     # your anon/public key
+```
+
+Then:
+```bash
 npm install
 npm run db:generate    # generate SQL migration from schema
-npm run db:migrate     # apply it to your Supabase Postgres
-npm run dev            # starts on http://localhost:3000
+npm run db:migrate     # apply tables to Supabase Postgres
+npm run dev            # API starts at http://localhost:3000
 ```
 
-### 3. Mobile app (`app/`)
+Verify it's running: `http://localhost:3000/health` should return `{"ok":true}`.
 
-```
+### 3. App setup
+
+```bash
 cd app
-cp .env.example .env   # fill in EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY, EXPO_PUBLIC_API_URL
+cp .env.example .env
+```
+
+Fill in `app/.env`:
+```
+EXPO_PUBLIC_SUPABASE_URL=       # same as SUPABASE_URL above
+EXPO_PUBLIC_SUPABASE_ANON_KEY=  # same as SUPABASE_ANON_KEY above
+EXPO_PUBLIC_API_URL=            # http://localhost:3000 (or your LAN IP for iPhone)
+```
+
+Then:
+```bash
 npm install
 npx expo start
 ```
 
-Scan the QR code with the Expo Go app on your iPhone to run it live.
+Scan the QR code with Expo Go on your iPhone, or press `w` to open in browser.
 
-## v1 scope
+---
 
-- Sign up / log in
-- Start a workout, add exercises, log sets (weight + reps)
-- Finish workout
-- View workout history
+## API Endpoints
 
-## Planned later
+All endpoints except `/health` require `Authorization: Bearer <supabase_token>`.
 
-- Rest timer, plate calculator
-- Program templates (e.g. 5x5 A/B) with auto weight progression
-- Progress charts
-- AI coach / chat features
+| Method | Path | Description |
+|---|---|---|
+| GET | `/health` | Health check |
+| POST | `/workouts` | Start a new workout |
+| GET | `/workouts` | List all workouts for the user |
+| GET | `/workouts/:id` | Get workout detail with exercises + sets |
+| PATCH | `/workouts/:id/finish` | Mark workout as finished |
+| POST | `/workouts/:id/exercises` | Add an exercise to a workout |
+| POST | `/workouts/exercises/:id/sets` | Log a set for an exercise |
+
+---
+
+## Roadmap
+
+- [x] Auth (sign up / sign in via Supabase)
+- [x] Core logging loop (workout → exercises → sets → history)
+- [ ] Polish logging UX (retain values, swipe to delete, set counters)
+- [ ] Progress tracking (PRs, per-exercise history)
+- [ ] Backend deployment (Railway / Fly.io)
+- [ ] Rest timer
+- [ ] Plate calculator
+- [ ] Program templates + auto weight progression
+- [ ] AI coach / chat
+- [ ] App Store release
