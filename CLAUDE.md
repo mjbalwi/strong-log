@@ -93,6 +93,91 @@ npx expo start         # scan QR with Expo Go on iPhone
 - [x] Supabase project created
 - [x] `api/.env` filled in
 - [x] `app/.env` filled in
-- [ ] `npm run db:migrate` — failing silently, likely a DATABASE_URL connection issue to debug
-- [ ] `npm run dev` (api)
-- [ ] `npx expo start` (app)
+- [x] `npm run db:migrate` — tables created in Supabase
+- [x] `npm run dev` (api) — running, /health returns ok
+- [ ] `npx expo start` (app) — runs in web; iPhone via Expo Go not yet connected
+- [ ] Sign up / sign in flow verified end-to-end
+
+---
+
+## Milestone Roadmap
+
+### Milestone 1 — Auth + Core Loop working end-to-end (current)
+Get the app fully usable on iPhone, not just browser.
+
+- [ ] Fix Expo Go connection on iPhone (tunnel or same-WiFi)
+- [ ] Sign up + sign in working (disable Supabase email confirmation for dev)
+- [ ] Start workout → add exercise → log sets → finish workout → see in history
+- [ ] Verify data appears correctly in Supabase Table Editor after a workout
+
+### Milestone 2 — Polish the logging UX
+Make logging sets feel fast and natural, like StrongLifts.
+
+- [ ] Weight/reps inputs retain last used values per exercise (don't clear between sets)
+- [ ] Set counter shows "Set 1 of 5" style indicator
+- [ ] Swipe to delete a set
+- [ ] Edit/delete an exercise from a workout
+- [ ] Confirm before finishing workout if sets are incomplete
+- [ ] Error handling: show user-friendly messages when API calls fail
+- [ ] Replace `Alert.alert` with inline error messages throughout (web-compatible)
+
+### Milestone 3 — Workout History + Progress
+Make past data useful.
+
+- [ ] History screen shows exercise names + set count per workout (not just date)
+- [ ] Workout detail shows duration (finishedAt - startedAt)
+- [ ] Per-exercise history: see all past sets for a given exercise across workouts
+- [ ] Personal records: track and display heaviest weight per exercise
+
+### Milestone 4 — Deploy backend
+Make the API accessible from anywhere, not just localhost.
+
+- [ ] Deploy Express API to Railway or Fly.io
+- [ ] Update `EXPO_PUBLIC_API_URL` in app to point to deployed URL
+- [ ] Set production environment variables on the hosting platform
+- [ ] Verify health check + auth flow against deployed API
+
+### Milestone 5 — Rest Timer
+A StrongLifts staple — auto-start a countdown between sets.
+
+- [ ] Configurable rest duration (default 90s)
+- [ ] Timer auto-starts after logging a set
+- [ ] Vibrate + sound when timer ends
+- [ ] Timer persists if you navigate away mid-rest
+
+### Milestone 6 — Plate Calculator
+Show which plates to load on the bar for a given weight.
+
+- [ ] Input target weight → output plates per side
+- [ ] Configurable available plate set
+- [ ] Accessible from the set logging row
+
+### Milestone 7 — Program Templates + Auto Progression
+The feature that makes this a real training tool, not just a logger.
+
+- [ ] Schema additions: `programs`, `program_workouts`, `program_exercises` tables
+- [ ] Built-in StrongLifts A/B template (Squat/Bench/Row + Squat/OHP/Deadlift)
+- [ ] Per-exercise working weight tracked across sessions
+- [ ] Auto-suggest next session weight: +5lb on completion, hold on fail
+- [ ] Deload logic: -10% after 3 consecutive failures on same weight
+- [ ] Custom program builder (user-defined exercises, sets, reps)
+
+### Milestone 8 — AI Coach / Chat
+The differentiating feature for recruiting + product value.
+
+- [ ] `/api/chat` endpoint on the Express backend (keeps API key server-side)
+- [ ] Context-aware: sends user's recent workout history to the LLM
+- [ ] Suggestions: form tips, progression advice, deload recommendations
+- [ ] Chat UI in the app: floating button → chat sheet
+- [ ] Streaming responses (Server-Sent Events from Express → app)
+
+### Milestone 9 — App Store release
+Ship it.
+
+- [ ] EAS Build set up (`eas.json`, Expo account)
+- [ ] App icons + splash screen finalized
+- [ ] App name updated in `app.json` (currently "app")
+- [ ] Apple Developer account enrolled
+- [ ] TestFlight build for internal testing
+- [ ] App Store listing (screenshots, description, keywords)
+- [ ] Production Supabase project (separate from dev)

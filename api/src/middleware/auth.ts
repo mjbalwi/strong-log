@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 
 export interface AuthedRequest extends Request {
   userId?: string;
+  userEmail?: string;
 }
 
 // Verifies the Supabase-issued JWT sent as "Authorization: Bearer <token>"
@@ -31,5 +32,6 @@ export async function requireAuth(req: AuthedRequest, res: Response, next: NextF
 
   const user = (await resp.json()) as { id: string; email?: string };
   req.userId = user.id;
+  req.userEmail = user.email
   next();
 }

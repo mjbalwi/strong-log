@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { useAuth } from "../context/AuthContext";
+import { colors } from "../theme/colors";
 
 export default function SignInScreen() {
   const { signIn, signUp } = useAuth();
@@ -29,6 +30,7 @@ export default function SignInScreen() {
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor={colors.textMuted}
         autoCapitalize="none"
         keyboardType="email-address"
         value={email}
@@ -37,6 +39,7 @@ export default function SignInScreen() {
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor={colors.textMuted}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
@@ -52,17 +55,19 @@ export default function SignInScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 24, gap: 12 },
-  title: { fontSize: 32, fontWeight: "700", textAlign: "center", marginBottom: 24 },
+  container: { flex: 1, justifyContent: "center", padding: 24, gap: 12, backgroundColor: colors.background },
+  title: { fontSize: 32, fontWeight: "700", textAlign: "center", marginBottom: 24, color: colors.textPrimary },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border,
     borderRadius: 8,
     padding: 14,
     fontSize: 16,
+    color: colors.textPrimary,
+    backgroundColor: colors.surface,
   },
   button: {
-    backgroundColor: "#111",
+    backgroundColor: colors.accent,
     borderRadius: 8,
     padding: 16,
     alignItems: "center",
@@ -70,6 +75,6 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
   buttonSecondary: { padding: 16, alignItems: "center" },
-  buttonSecondaryText: { color: "#111", fontSize: 16 },
-  error: { color: "red", textAlign: "center" },
+  buttonSecondaryText: { color: colors.accentLight, fontSize: 16 },
+  error: { color: colors.error, textAlign: "center" },
 });

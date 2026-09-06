@@ -13,7 +13,7 @@ async function ensureUser(userId: string, email: string | undefined) {
 
 workoutsRouter.post("/", async (req: AuthedRequest, res) => {
   const userId = req.userId!;
-  await ensureUser(userId, undefined);
+  await ensureUser(userId, req.userEmail);
 
   const [workout] = await db.insert(workouts).values({ userId }).returning();
   res.status(201).json(workout);
