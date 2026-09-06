@@ -95,22 +95,27 @@ npx expo start         # scan QR with Expo Go on iPhone
 - [x] `app/.env` filled in
 - [x] `npm run db:migrate` — tables created in Supabase
 - [x] `npm run dev` (api) — running, /health returns ok
-- [ ] `npx expo start` (app) — runs in web; iPhone via Expo Go not yet connected
-- [ ] Sign up / sign in flow verified end-to-end
+- [x] iPhone connected via Expo Go (tunnel mode with ngrok — new URL each session, update `EXPO_PUBLIC_API_URL` in `app/.env`)
+- [x] Sign up / sign in working (Supabase email confirmation disabled for dev)
+- [x] Full workout loop verified end-to-end on iPhone (start → exercises → sets → finish → history)
+- [x] Data confirmed in Supabase Table Editor (users, workouts, exercises, sets)
+- [x] Bottom tab navigator (Home, Programs, History)
+- [x] Dark purple theme applied across all screens (shared `src/theme/colors.ts`)
+- [x] History tab refreshes on focus with `useFocusEffect`
+- [x] Auth middleware passes email to `ensureUser` so users table saves email correctly
+
+## Dev startup sequence (each session)
+1. `cd api` → `npm run dev` (port 3000)
+2. New terminal → `ngrok http 3000` → copy HTTPS URL → paste into `app/.env` as `EXPO_PUBLIC_API_URL`
+3. `cd app` → `npx expo start --tunnel`
 
 ---
 
 ## Milestone Roadmap
 
-### Milestone 1 — Auth + Core Loop working end-to-end (current)
-Get the app fully usable on iPhone, not just browser.
+### Milestone 1 — Auth + Core Loop ✅ COMPLETE
 
-- [ ] Fix Expo Go connection on iPhone (tunnel or same-WiFi)
-- [ ] Sign up + sign in working (disable Supabase email confirmation for dev)
-- [ ] Start workout → add exercise → log sets → finish workout → see in history
-- [ ] Verify data appears correctly in Supabase Table Editor after a workout
-
-### Milestone 2 — Polish the logging UX
+### Milestone 2 — Polish the logging UX (current)
 Make logging sets feel fast and natural, like StrongLifts.
 
 - [ ] Weight/reps inputs retain last used values per exercise (don't clear between sets)
